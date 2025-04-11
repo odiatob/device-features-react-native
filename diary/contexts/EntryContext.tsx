@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Define the diary entry type
+
 export type DiaryEntry = {
   id: string;
   imageUri: string;
@@ -11,7 +11,7 @@ export type DiaryEntry = {
   longitude?: number;
 };
 
-// Define the context type
+
 type EntryContextType = {
   entries: DiaryEntry[];
   addEntry: (entry: DiaryEntry) => Promise<void>;
@@ -19,7 +19,6 @@ type EntryContextType = {
   loading: boolean;
 };
 
-// Create the context
 export const EntryContext = createContext<EntryContextType>({
   entries: [],
   addEntry: async () => {},
@@ -27,15 +26,14 @@ export const EntryContext = createContext<EntryContextType>({
   loading: true,
 });
 
-// Storage key
+
 const STORAGE_KEY = 'diaryEntries';
 
-// Provider component
+
 export const EntryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [entries, setEntries] = useState<DiaryEntry[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // Load entries from AsyncStorage on mount
   useEffect(() => {
     const loadEntries = async () => {
       try {
@@ -53,7 +51,6 @@ export const EntryProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     loadEntries();
   }, []);
 
-  // Save entries to AsyncStorage
   const saveEntries = async (updatedEntries: DiaryEntry[]) => {
     try {
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedEntries));
@@ -62,14 +59,13 @@ export const EntryProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   };
 
-  // Add new entry
   const addEntry = async (entry: DiaryEntry) => {
     const updatedEntries = [...entries, entry];
     setEntries(updatedEntries);
     await saveEntries(updatedEntries);
   };
 
-  // Remove entry
+
   const removeEntry = async (id: string) => {
     const updatedEntries = entries.filter(entry => entry.id !== id);
     setEntries(updatedEntries);

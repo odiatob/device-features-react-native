@@ -2,7 +2,6 @@ import React, { createContext, useState, useEffect } from 'react';
 import { useColorScheme } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Define theme types
 export type ThemeType = {
   dark: boolean;
   colors: {
@@ -17,7 +16,6 @@ export type ThemeType = {
   };
 };
 
-// Define light and dark themes
 export const lightTheme: ThemeType = {
   dark: false,
   colors: {
@@ -52,19 +50,16 @@ type ThemeContextType = {
   toggleTheme: () => void;
 };
 
-// Create the context
 export const ThemeContext = createContext<ThemeContextType>({
   theme: lightTheme,
   isDark: false,
   toggleTheme: () => {},
 });
 
-// Provider component
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const deviceTheme = useColorScheme();
   const [isDark, setIsDark] = useState<boolean>(deviceTheme === 'dark');
 
-  // Load saved theme preference on mount
   useEffect(() => {
     const loadTheme = async () => {
       try {
@@ -72,7 +67,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         if (savedTheme !== null) {
           setIsDark(savedTheme === 'dark');
         } else {
-          // Use device theme as default
+
           setIsDark(deviceTheme === 'dark');
         }
       } catch (e) {
@@ -83,7 +78,6 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     loadTheme();
   }, [deviceTheme]);
 
-  // Toggle theme function
   const toggleTheme = async () => {
     try {
       const newTheme = !isDark;
